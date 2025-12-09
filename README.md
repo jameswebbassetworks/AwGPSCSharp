@@ -118,6 +118,7 @@ Note that the files we test the program with may not be the same ones provided
 
 ## Bonus Points
 - Add logging
+- Display Only the 'Model Year', 'Make', 'Model' and 'Fuel Type - Primary'
 - Add unit tests
 - Handle edge cases and validation
 
