@@ -84,10 +84,10 @@ namespace CSharpInterviewMessageProcessor
         public static Dictionary<EventTypeCode, string[]> VisibleInfoByEventType { get; set; } = new Dictionary<EventTypeCode, string[]>
         {
             { EventTypeCode.Location, [] },
-            { EventTypeCode.SpeedingStart, ["DisplayCurrentSpeed"] },
-            { EventTypeCode.SpeedingStop, ["DisplayCurrentSpeed","DisplayMaxSpeed"] },
+            { EventTypeCode.SpeedingStart, [Constants.Display.CurrentSpeed] },
+            { EventTypeCode.SpeedingStop, [Constants.Display.CurrentSpeed, Constants.Display.MaxSpeed] },
             { EventTypeCode.IdleStart, [] },
-            { EventTypeCode.IdleEnd, ["DisplayCurrentSpeed","DisplayIdleTime"] }
+            { EventTypeCode.IdleEnd, [Constants.Display.CurrentSpeed, Constants.Display.IdleTime] }
         };
         #endregion
 
@@ -242,15 +242,15 @@ namespace CSharpInterviewMessageProcessor
                 string response = webRequestHelper.Get(requestUrl);
 
                 JObject jsonResponse = JObject.Parse(response);
-                JArray resultsArray = (JArray)jsonResponse["Results"];
+                JArray resultsArray = (JArray)jsonResponse[Constants.Vin.Results];
 
                 if (resultsArray != null && resultsArray.Count > 0)
                 {
                     JObject firstResult = (JObject)resultsArray[0];
-                    string? make = firstResult["Make"]?.ToString();
-                    string? model = firstResult["Model"]?.ToString();
-                    string? year = firstResult["ModelYear"]?.ToString();
-                    string? fuelType = firstResult["FuelTypePrimary"]?.ToString();
+                    string? make = firstResult[Constants.Vin.Make]?.ToString();
+                    string? model = firstResult[Constants.Vin.Model]?.ToString();
+                    string? year = firstResult[Constants.Vin.ModelYear]?.ToString();
+                    string? fuelType = firstResult[Constants.Vin.PrimaryFuelType]?.ToString();
 
                     formattedVin = $"Model Year: {year}, Make: {make}, Model: {model}, Fuel Type - Primary: {fuelType}";
                 }
