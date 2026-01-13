@@ -10,7 +10,16 @@ public class MessageProcessor
         // 1. Extract the relevent information from the message
         // 2. Take the approrpriate action based on the event code in the message
 
-        Event ev = new Event(message);
+        Event ev = new Event();
+
+        MessageEventMapper.MapEventType(message, ev);
+        MessageEventMapper.MapLocation(message, ev);
+        MessageEventMapper.MapTimestamp(message, ev);
+        MessageEventMapper.MapCurrentSpeed(message, ev);
+        MessageEventMapper.MapMaxSpeed(message, ev);
+        MessageEventMapper.MapIdleTime(message, ev);
+        MessageEventMapper.MapVIN(message, ev);
+        MessageEventMapper.SetDisplayValues(ev);
 
         Console.WriteLine(ev.ToString());
 
