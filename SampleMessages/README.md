@@ -57,3 +57,6 @@ Each message type represents messages from a different GPS device manufacturer. 
 - `type3-idle-end.xml` - Type 3 idle end (with VIN)
 - `type3-speeding-start.xml` - Type 3 speeding event start (with VIN)
 - `type3-speeding-end.xml` - Type 3 speeding event end (with VIN)
+
+//I will use Builder pattern to declare whole types of messages
+
