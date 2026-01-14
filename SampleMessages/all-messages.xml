@@ -137,7 +137,6 @@
     <field number="12">51</field>
     <field number="25">130.0</field>
     <field number="26">90</field>
-    <field number="27">135.0</field>
   </message>
   <message type="3">
     <field number="0">1FT7W2BT2EEB76476</field>
@@ -149,5 +148,6 @@
     <field number="12">52</field>
     <field number="25">90.0</field>
     <field number="26">95</field>
+    <field number="27">135.0</field>
   </message>
 </messages>
