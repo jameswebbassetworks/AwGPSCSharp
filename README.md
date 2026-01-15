@@ -122,4 +122,108 @@ Note that the files we test the program with may not be the same ones provided
 - Add unit tests
 - Handle edge cases and validation
 
-Good luck!
+Good luck! #Thank you!
+
+---
+
+## Solution Overview & Design Decisions
+
+This section describes the design and implementation choices made to complete the assignment.
+
+### High-Level Architecture
+
+The solution follows a clear separation of concerns and is organized into logical layers:
+
+- **Domain**
+  - Core business models such as `VehicleEvent` and `VehicleEventType`
+  - No infrastructure or framework dependencies
+
+- **Vendors**
+  - Message translators per GPS manufacturer (`MessageTypeZero`, `MessageTypeOne`, `MessageTypeThree`)
+  - Each translator is responsible for mapping raw message fields into a normalized domain event
+
+- **Processing**
+  - `MessageBuilder` selects the correct translator based on `MessageType`
+  - `MessageProcessor` orchestrates message translation and dispatching
+  - `VehicleEventDispatcher` handles event-specific output logic
+
+- **Infrastructure (Infra)**
+  - VIN decoding client using the provided `WebRequestHelper`
+  - Logging abstraction with a console-based implementation
+
+This structure keeps the system extensible, testable, and easy to reason about.
+
+---
+
+### Message Translation Strategy
+
+Instead of using large `switch` statements, each message type is handled by a dedicated translator implementing a common interface.
+
+Benefits:
+- Adding a new device type requires **no changes** to existing logic
+- Field mappings are isolated per manufacturer
+- Improves readability and maintainability
+
+---
+
+### Event Handling Strategy
+
+Event handling is implemented using a dictionary-based dispatcher:
+
+- Each `VehicleEventType` is mapped to a dedicated handler
+- Avoids complex conditional logic
+- Makes behavior easy to extend or modify
+
+---
+
+### VIN Enrichment
+
+For message types containing a VIN:
+- The VIN is decoded using the official NHTSA API
+- Only the following fields are displayed as required:
+  - Model Year
+  - Make
+  - Model
+  - Fuel Type – Primary
+
+This logic is isolated from core processing to avoid coupling business logic with external services.
+
+---
+
+### Logging
+
+Basic structured logging was added to:
+- Track message processing flow
+- Record event type and timestamps
+- Aid debugging without cluttering business logic
+
+---
+
+### Validation & Error Handling
+
+The system validates:
+- Required fields per message type
+- Supported message types and event codes
+- Proper parsing of timestamps and coordinates
+
+Failures are handled using clear exceptions and fail-fast behavior.
+
+---
+
+### Testing Strategy
+
+Unit tests were added for:
+- Message translators (field mapping and event detection)
+- Validation and error scenarios
+
+External services (VIN decoding API) are treated as third-party dependencies and are not directly unit tested.
+
+---
+
+### Why This Design
+
+The chosen design emphasizes:
+- **Open/Closed Principle** – new message types can be added without modifying existing code
+- **Single Responsibility** – each class has a clear, focused purpose
+- **Testability** – core logic can be tested without infrastructure dependencies
+- **Real-world maintainability** – mirrors patterns used in production message-processing systems

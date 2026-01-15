@@ -62,4 +62,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="AwGPSCSharp.Tests/**/*.cs" />
+  </ItemGroup>
+
 </Project>
