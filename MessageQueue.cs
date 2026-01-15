@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using System.Threading;
+using AwGPSCSharp.Domain;
 
 namespace CSharpInterviewMessageProcessor;
 

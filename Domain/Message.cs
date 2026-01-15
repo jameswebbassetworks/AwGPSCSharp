@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace CSharpInterviewMessageProcessor;
+namespace AwGPSCSharp.Domain;
 
 public class Message
 {

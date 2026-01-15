@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AwGPSCSharp.Domain;
+using CSharpInterviewMessageProcessor;
 
-namespace AwGPSCSharp.Vendors
+namespace AwGPSCSharp.Vendors;
+
+public interface IMessage
 {
-    public interface IMessage
-    {
-        
-    }
+    int MessageType { get; }
+    VehicleEvent Translate(Message message);
 }
