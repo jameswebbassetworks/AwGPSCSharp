@@ -3,6 +3,13 @@ using System;
 using System.IO;
 using System.Threading;
 
+/// <summary>
+/// Things todo:
+///
+/// - Add logging here for application
+/// - Dependency Injection for the logging for reuse
+/// - Dependency Inject for the database
+/// </summary>
 internal class Program
 {
     private static void Main(string[] args)
