@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using CSharpInterviewMessageProcessor.Models;
 
+/// <summary>
+/// Handles processing of different event types from translated messages
+/// </summary>
 public class EventProcessor
 {
     private readonly Dictionary<string, Action<object>> _eventActions;
 
     public EventProcessor()
     {
+        /// Initialize the mapping of event types to their handlers
         _eventActions = new Dictionary<string, Action<object>>
         {
             { "Location", EventTypeLocation },
@@ -17,6 +21,11 @@ public class EventProcessor
             { "IdleEnd", EventTypeEnd }
         };
     }
+
+    /// <summary>
+    /// Processes the translated message based on its event type
+    /// </summary>
+    /// <param name="translatedMessage"></param>
 
     public void ProcessEvent(object translatedMessage)
     {
@@ -31,7 +40,11 @@ public class EventProcessor
             Console.WriteLine("Unknown event type or unsupported message type");
         }
     }
-
+    /// <summary>
+    /// EventType getter based on message type and event code
+    /// </summary>
+    /// <param name="msg"></param>
+    /// <returns></returns>
     private string GetEventType(object msg)
     {
         switch (msg)
@@ -75,7 +88,11 @@ public class EventProcessor
     }
 
     #region Handlers
-
+    /// <summary>
+    /// Processes location-related messages of various types and outputs relevant location and device information to the
+    /// console.
+    /// </summary>
+    /// <param name="msg">The message object containing location event data.</param>
     private void EventTypeLocation(object msg)
     {
         switch (msg)
@@ -97,6 +114,10 @@ public class EventProcessor
 
         }
     }
+    /// <summary>
+    /// event handler for speeding start events
+    /// </summary>
+    /// <param name="msg"></param>
 
     private void EventTypeSpeedingStart(object msg)
     {
@@ -119,7 +140,10 @@ public class EventProcessor
                 break;
         }
     }
-
+    /// <summary>
+    /// Handles and logs speeding stop events based on the type of message received.
+    /// </summary>
+    /// <param name="msg">The message object containing speeding stop event data.</param>
     private void EventTypeSpeedingStop(object msg)
     {
         switch (msg)
@@ -141,7 +165,10 @@ public class EventProcessor
                 break;
         }
     }
-
+    /// <summary>
+    /// event handler for idle start events
+    /// </summary>
+    /// <param name="msg"></param>
     private void EventTypeStart(object msg)
     {
         switch (msg)
@@ -163,6 +190,10 @@ public class EventProcessor
                 break;
         }
     }
+    /// <summary>
+    /// event handler for idle end events
+    /// </summary>
+    /// <param name="msg"></param>
 
     private void EventTypeEnd(object msg)
     {
@@ -185,7 +216,11 @@ public class EventProcessor
                 break;
         }
     }
-
+    /// <summary>
+    /// Process vehicle information using VIN from NHTSA API
+    /// </summary>
+    /// <param name="vin"></param>
+    /// <returns></returns>
     public static string ProcesswithVin(string vin)
     {
         if (string.IsNullOrEmpty(vin))

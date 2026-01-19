@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace CSharpInterviewMessageProcessor.Models
 {
+
+    /// <summary>
+    /// Type0Message model class
+    /// </summary>
     public class Type0Message
     {
         public string DeviceID { get; set; }

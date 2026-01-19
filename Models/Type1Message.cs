@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace CSharpInterviewMessageProcessor.Models
 {
+    /// <summary>
+    /// Type1Message model class
+    /// </summary>
     public class Type1Message
     {
      

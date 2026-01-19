@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace CSharpInterviewMessageProcessor.Models
 {
+
+    /// <summary>
+    /// Type3Message model class
+    /// </summary>
     public class Type3Message
     {
         // Required fields

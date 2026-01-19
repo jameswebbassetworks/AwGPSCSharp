@@ -12,6 +12,7 @@ public class MessageProcessor
 
     public MessageProcessor()
     {
+        // Initialize the translator map
         _translatorMap = new Dictionary<int, Func<Message, object>>
         {
             { 0, msg => new Type0TranslatorClass().Translate(msg) },
@@ -21,21 +22,36 @@ public class MessageProcessor
         };
 
     }
-
+    /// <summary>
+    /// Processes the incoming message by translating it and passing it to the event processor.
+    /// </summary>
+    /// <param name="message"></param>
+    /// <returns></returns>
     public object Process(Message message)
     {
-        var translatedMessages = new List<object>();
-        foreach (var mess in _translatorMap)
+        try
         {
-            if (!_translatorMap.TryGetValue(mess.Key, out var translatorFunc))
-                throw new NotSupportedException($"Message type {message.MessageType} is not supported");
+            var translatedMessages = new List<object>();
+            foreach (var mess in _translatorMap)
+            {
+                if (!_translatorMap.TryGetValue(mess.Key, out var translatorFunc))
+                    throw new NotSupportedException($"Message type {message.MessageType} is not supported");
 
-            var translatedMessage = translatorFunc(message);
-            _eventProcessor.ProcessEvent(translatedMessage);
-            translatedMessages.Add(translatedMessage);
+                /// Translate the message
+                var translatedMessage = translatorFunc(message);
+
+                /// Pass the translated message to the event processor
+                _eventProcessor.ProcessEvent(translatedMessage);
+                translatedMessages.Add(translatedMessage);
+            }
+
+            // Return all translated messages for further processing if needed
+            return translatedMessages;
         }
-
-        // Return all translated messages for further processing if needed
-        return translatedMessages;
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error processing message: {ex.Message}");
+            throw;
+        }
     }
 }
