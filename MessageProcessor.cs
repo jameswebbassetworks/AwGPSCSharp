@@ -7,27 +7,35 @@ using CSharpInterviewMessageProcessor.TranslatorClass;
 public class MessageProcessor
 {
     // Dictionary maps message type to translator
-    private readonly Dictionary<int, Imess> _translators;
+    private readonly Dictionary<int, Func<Message, object>> _translatorMap;
+    EventProcessor _eventProcessor = new EventProcessor();
 
     public MessageProcessor()
     {
-        _translators = new Dictionary<int, IMessageTranslator>
+        _translatorMap = new Dictionary<int, Func<Message, object>>
         {
-            { 0, new Type0Translator() },
-            { 1, new Type1Translator() },
-            { 2, new Type2Translator() },
-            { 3, new Type3Translator() }
+            { 0, msg => new Type0TranslatorClass().Translate(msg) },
+            { 1, msg => new Type1TranslatorClass().Translate(msg) },
+            { 2, msg => new Type2TranslatorClass().Translate(msg) },
+            { 3, msg => new Type3TranslatorClass().Translate(msg) }
         };
+
     }
 
     public object Process(Message message)
     {
-        if (!_translators.TryGetValue(message.Type, out var translator))
+        var translatedMessages = new List<object>();
+        foreach (var mess in _translatorMap)
         {
-            throw new NotSupportedException($"Message type {message.Type} is not supported");
+            if (!_translatorMap.TryGetValue(mess.Key, out var translatorFunc))
+                throw new NotSupportedException($"Message type {message.MessageType} is not supported");
+
+            var translatedMessage = translatorFunc(message);
+            _eventProcessor.ProcessEvent(translatedMessage);
+            translatedMessages.Add(translatedMessage);
         }
 
-        // Translate message using the correct translator
-        return translator.Translate(message);
+        // Return all translated messages for further processing if needed
+        return translatedMessages;
     }
 }

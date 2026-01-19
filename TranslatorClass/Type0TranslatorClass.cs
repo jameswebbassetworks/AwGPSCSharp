@@ -17,7 +17,7 @@ namespace CSharpInterviewMessageProcessor.TranslatorClass
 
             return new Type0Message
             {
-                DeviceID = int.Parse(fields[0]),                    
+                DeviceID = fields[0],                    
                 EventCode = fields[1]        ,                  
                 Latitude = fields[4],                               
                 Longitude = fields[5],                             

@@ -8,7 +8,7 @@ using CSharpInterviewMessageProcessor.Models;
 
 namespace CSharpInterviewMessageProcessor.TranslatorClass
 {
-    public class Type3Translator : IMessageTranslator<Type3Message>
+    public class Type3TranslatorClass : IMessageTranslator<Type3Message>
     {
         public Type3Message Translate(Message message)
         {

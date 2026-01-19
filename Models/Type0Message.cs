@@ -8,7 +8,7 @@ namespace CSharpInterviewMessageProcessor.Models
 {
     public class Type0Message
     {
-        public int DeviceID { get; set; }
+        public string DeviceID { get; set; }
         public string EventCode { get; set; } = string.Empty;
         public string Latitude { get; set; }
 
