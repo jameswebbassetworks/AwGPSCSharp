@@ -7,8 +7,8 @@ using CSharpInterviewMessageProcessor.Models;
 
 namespace CSharpInterviewMessageProcessor.Interfaces
 {
-    public interface IMessageTranslator
+    public interface IMessageTranslator<TMessage>
     {
-        VehicleEvent Translate(Message message);
+        TMessage Translate(Message message);
     }
 }

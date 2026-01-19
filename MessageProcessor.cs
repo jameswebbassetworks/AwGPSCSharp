@@ -1,31 +1,33 @@
 using System;
-using System.Xml;
+using System.Collections.Generic;
+using CSharpInterviewMessageProcessor;
 using CSharpInterviewMessageProcessor.Interfaces;
-using CSharpInterviewMessageProcessor.Models;
 using CSharpInterviewMessageProcessor.TranslatorClass;
-
-namespace CSharpInterviewMessageProcessor;
 
 public class MessageProcessor
 {
-    public void Process(Message message)
+    // Dictionary maps message type to translator
+    private readonly Dictionary<int, Imess> _translators;
+
+    public MessageProcessor()
     {
-        // TODO: Interviewee should implement logic to:
-        // 1. Extract the relevent information from the message
-        // 2. Take the approrpriate action based on the event code in the message
-
-        Console.WriteLine("Processing message...");
-        Console.WriteLine($"Message contains {message.Fields.Count} fields");
-
-        IMessageTranslator translator = message.MessageType switch
+        _translators = new Dictionary<int, IMessageTranslator>
         {
-            0 => new Type0TranslatorClass(),
-           // 1 => new Type1TranslatorClass(),
-            //2 => new Type2TranslatorClass(),
-            _ => throw new NotSupportedException($"Message type {message.MessageType} is not supported")
+            { 0, new Type0Translator() },
+            { 1, new Type1Translator() },
+            { 2, new Type2Translator() },
+            { 3, new Type3Translator() }
         };
+    }
 
-        // Step 2: Translate the message
-        VehicleEvent vehicleEvent = translator.Translate(message);
+    public object Process(Message message)
+    {
+        if (!_translators.TryGetValue(message.Type, out var translator))
+        {
+            throw new NotSupportedException($"Message type {message.Type} is not supported");
+        }
+
+        // Translate message using the correct translator
+        return translator.Translate(message);
     }
 }

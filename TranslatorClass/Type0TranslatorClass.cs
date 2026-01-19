@@ -8,31 +8,25 @@ using CSharpInterviewMessageProcessor.Models;
 
 namespace CSharpInterviewMessageProcessor.TranslatorClass
 {
-    public class Type0TranslatorClass : IMessageTranslator
+    public class Type0TranslatorClass : IMessageTranslator<Type0Message>
     {
-      
-        public VehicleEvent Translate(Message message)
+
+        public Type0Message Translate(Message message)
         {
             var fields = message.Fields;
 
-            return new VehicleEvent
+            return new Type0Message
             {
-                EventType = MapEvent(fields[1]),
-                Timestamp = DateTime.Parse(fields[2]),
-                Location = fields[3],
-                Speed = fields.ContainsKey(4) ? double.Parse(fields[4]) : null
+                DeviceID = int.Parse(fields[0]),                    
+                EventCode = fields[1]        ,                  
+                Latitude = fields[4],                               
+                Longitude = fields[5],                             
+                Timestamp = DateTime.Parse(fields[6]),             
+                Speed = fields.ContainsKey(7) ? double.Parse(fields[7]) : (double?)null,  
+                Direction = fields.ContainsKey(8) ? fields[8] : string.Empty,             
+                IdleTime = fields.ContainsKey(9) ? int.Parse(fields[9]) : (int?)null,      
+                MaxSpeed = fields.ContainsKey(10) ? double.Parse(fields[10]) : (double?)null 
             };
         }
-        private string MapEvent(string code) =>
-       code switch
-       {
-           "0" => "Location",
-           "1" => "SpeedingStart",
-           "3" => "SpeedingStop",
-           "4" => "IdleStart",
-           "5" => "IdleEnd",
-           _ => "Unknown"
-       };
-
     }
 }
