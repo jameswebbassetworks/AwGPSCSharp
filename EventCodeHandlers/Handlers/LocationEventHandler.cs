@@ -5,8 +5,7 @@ namespace CSharpInterviewMessageProcessor.EventCodeHandlers.Handlers;
 
 public class LocationEventHandler : IEventCodeHandler
 {
-    public const string EventCodeName = "Location";
-
+    public string EventCodeName => "Location";
 
     public void HandleEventCode(CombinedMessage message)
     {

@@ -5,8 +5,7 @@ namespace CSharpInterviewMessageProcessor.EventCodeHandlers.Handlers;
 
 public class EndSpeedingEventHandler : IEventCodeHandler
 {
-    public const string EventCodeName = "EndSpeed";
-
+    public string EventCodeName => "EndSpeed";
 
     public void HandleEventCode(CombinedMessage message)
     {

@@ -1,10 +1,9 @@
 using System;
 using CSharpInterviewMessageProcessor.EventCodeHandlers;
 using CSharpInterviewMessageProcessor.EventCodeHandlers.Handlers;
+using CSharpInterviewMessageProcessor.Helpers;
 using CSharpInterviewMessageProcessor.MessageTypes;
-using CSharpInterviewMessageProcessor.MessageTypes.ManufacturerA;
-using CSharpInterviewMessageProcessor.MessageTypes.ManufacturerB;
-using CSharpInterviewMessageProcessor.MessageTypes.ManufacturerC;
+using CSharpInterviewMessageProcessor.MessageTypes.Common;
 
 namespace CSharpInterviewMessageProcessor;
 
@@ -12,15 +11,19 @@ public class MessageProcessor
 {
     public MessageProcessor()
     {
-        MessageTypeHandler.RegisterHandler(ManufacturerAMessage.MessageTypeId, new ManufacturerAMessage());
-        MessageTypeHandler.RegisterHandler(ManufacturerBMessage.MessageTypeId, new ManufacturerBMessage());
-        MessageTypeHandler.RegisterHandler(ManufacturerCMessage.MessageTypeId, new ManufacturerCMessage());
-        
-        _eventCodeHandlerService.RegisterHandler(LocationEventHandler.EventCodeName, new LocationEventHandler());
-        _eventCodeHandlerService.RegisterHandler(StartSpeedingEventHandler.EventCodeName, new StartSpeedingEventHandler());
-        _eventCodeHandlerService.RegisterHandler(EndSpeedingEventHandler.EventCodeName, new EndSpeedingEventHandler());
-        _eventCodeHandlerService.RegisterHandler(IdleStartEventHandler.EventCodeName, new IdleStartEventHandler());
-        _eventCodeHandlerService.RegisterHandler(IdleEndEventHandler.EventCodeName, new IdleEndEventHandler());
+        // Register all Message Handlers
+        var messageHandlers = ReflectionHelper.GetObjectsByBaseClass<BaseMessageHandler>();
+        foreach (var messageHandler in messageHandlers)
+        {
+            messageHandler.RegisterSelf();
+        }
+
+        // Register all Event Code Handlers
+        var eventCodeHandlers = ReflectionHelper.GetObjectsByBaseClass<IEventCodeHandler>();
+        foreach (var eventCodeHandler in eventCodeHandlers)
+        {
+            _eventCodeHandlerService.RegisterHandler(eventCodeHandler.EventCodeName, eventCodeHandler);
+        }
     }
 
     private readonly EventCodeHandlerService _eventCodeHandlerService = new();

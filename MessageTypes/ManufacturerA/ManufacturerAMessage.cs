@@ -6,7 +6,7 @@ using FluentValidation;
 
 namespace CSharpInterviewMessageProcessor.MessageTypes.ManufacturerA;
 
-public class ManufacturerAMessage : IMessageType, IMessageHandler
+public class ManufacturerAMessage : BaseMessageHandler, IMessageType, IMessageHandler
 {
     public string DeviceId { get; set; }
     public EventCodeType EventCode { get; set; }
@@ -18,8 +18,9 @@ public class ManufacturerAMessage : IMessageType, IMessageHandler
     public double? Idletime { get; set; }
     public double? MaxSpeed { get; set; }
 
-    public const int MessageTypeId = 0;
+    protected override int MessageTypeId => 0;
 
+    
     public static ManufacturerAMessage MapToMessageFromDto(IDto messageBaseDto)
     {
         var manufacturerAMessageDto = (ManufacturerAMessageDto)messageBaseDto;
@@ -115,7 +116,7 @@ public class ManufacturerAMessage : IMessageType, IMessageHandler
     //     // ParsedMessage = MapToMessageFromDto(dto);
     // }
 
-    public IMessageType GenerateMessage(Dictionary<int, string> fields)
+    public override IMessageType GenerateMessage(Dictionary<int, string> fields)
     {
         var dto = ManufacturerAMessageDto.CreateManufacturerAMessageDto(fields);
         // ParsedMessage = MapToMessageFromDto(dto);

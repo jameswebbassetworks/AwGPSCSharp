@@ -5,8 +5,7 @@ namespace CSharpInterviewMessageProcessor.EventCodeHandlers.Handlers;
 
 public class IdleEndEventHandler : IEventCodeHandler
 {
-    public const string EventCodeName = "IdleEnd";
-
+    public string EventCodeName => "IdleEnd";
 
     public void HandleEventCode(CombinedMessage message)
     {
