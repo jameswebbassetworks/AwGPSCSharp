@@ -1,10 +1,30 @@
 using System;
-using CSharpInterviewMessageProcessor.Models;
+using CSharpInterviewMessageProcessor.EventCodeHandlers;
+using CSharpInterviewMessageProcessor.EventCodeHandlers.Handlers;
+using CSharpInterviewMessageProcessor.MessageTypes;
+using CSharpInterviewMessageProcessor.MessageTypes.ManufacturerA;
+using CSharpInterviewMessageProcessor.MessageTypes.ManufacturerB;
+using CSharpInterviewMessageProcessor.MessageTypes.ManufacturerC;
 
 namespace CSharpInterviewMessageProcessor;
 
 public class MessageProcessor
 {
+    public MessageProcessor()
+    {
+        MessageTypeHandler.RegisterHandler(ManufacturerAMessage.MessageTypeId, new ManufacturerAMessage());
+        MessageTypeHandler.RegisterHandler(ManufacturerBMessage.MessageTypeId, new ManufacturerBMessage());
+        MessageTypeHandler.RegisterHandler(ManufacturerCMessage.MessageTypeId, new ManufacturerCMessage());
+        
+        _eventCodeHandlerService.RegisterHandler(LocationEventHandler.EventCodeName, new LocationEventHandler());
+        _eventCodeHandlerService.RegisterHandler(StartSpeedingEventHandler.EventCodeName, new StartSpeedingEventHandler());
+        _eventCodeHandlerService.RegisterHandler(EndSpeedingEventHandler.EventCodeName, new EndSpeedingEventHandler());
+        _eventCodeHandlerService.RegisterHandler(IdleStartEventHandler.EventCodeName, new IdleStartEventHandler());
+        _eventCodeHandlerService.RegisterHandler(IdleEndEventHandler.EventCodeName, new IdleEndEventHandler());
+    }
+
+    private readonly EventCodeHandlerService _eventCodeHandlerService = new();
+    
     public void Process(Message message)
     {
         // TODO: Interviewee should implement logic to:
@@ -14,31 +34,11 @@ public class MessageProcessor
         Console.WriteLine("Processing message...");
         Console.WriteLine($"Message contains {message.Fields.Count} fields");
 
-        // Thought 1
-        var m1Message = new CombinedMessage
-        {
-            DeviceID = message.Fields[ManufacturerA.DeviceId],
-            EventCodeID = message.Fields[ManufacturerA.EventCode]
-        };
+        var parsedMessage = MessageTypeHandler.RunHandler(message.MessageType, message.Fields);
+        var combinedMessage = parsedMessage.ToCombinedMessage();
+        
+        _eventCodeHandlerService.RunHandler(combinedMessage.EventCodeName, combinedMessage);
 
-
-        // Thought 2
-        var newMessage = message.MessageType switch
-        {
-            0 or 1 or 3 => CombinedMessage.Map(message.Fields, message.MessageType),
-            _ => throw new Exception("Unknown MessageType")
-        };
-        
-        // Mechanism to:
-        // Register a parser for the different manufacturer based on the MessageType
-        // Each manufacturers logic maintained in into own Parse
-        
-        
-        // For the Event Codes
-        // Register an action for the different event codes by name as the ID changes depending on the Manufacturer
-        // Those actions would run against the message and manufacturer
-        
-        
-        
     }
 }
+
