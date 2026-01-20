@@ -13,9 +13,9 @@ public class CombinedMessage
     public DateOnly Date { get; set; }
     public TimeOnly Time { get; set; }
     public double Speed { get; set; }
+    public string SpeedUnits { get; set; }
     public int Direction { get; set; }
     public double? Idletime { get; set; }
     public double? MaxSpeed { get; set; }
-    public string? VINIdle { get; set; }
-    public string? VINSpeed { get; set; }
+    public string? VIN { get; set; }
 }

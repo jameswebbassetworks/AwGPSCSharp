@@ -1,4 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using CSharpInterviewMessageProcessor.Extensions;
+using CSharpInterviewMessageProcessor.Helpers.WebRequests;
 using CSharpInterviewMessageProcessor.MessageTypes.Common;
 
 namespace CSharpInterviewMessageProcessor.EventCodeHandlers.Handlers;
@@ -9,6 +14,19 @@ public class IdleEndEventHandler : IEventCodeHandler
 
     public void HandleEventCode(CombinedMessage message)
     {
-        Console.WriteLine($"Handling the {EventCodeName} Event Code");
+        Console.WriteLine(new string("-"), 15);
+        if (message.VIN.IsNotNullOrWhiteSpace())
+        {
+            ((IEventCodeHandler)this).LogVinInformation(message); // Trying out Default Interface Method here.
+        }
+        Console.WriteLine($"Event Type: {message.EventCodeName}");
+        Console.WriteLine($"Timestamp: {message.Timestamp:u}");
+        Console.WriteLine("Location:");
+        Console.WriteLine($"    Latitude: {message.Latitude}");
+        Console.WriteLine($"    Longitude: {message.Longitude}");
+        if (message.Idletime.HasValue)
+        {
+            Console.WriteLine($"Idle Time: {message.Idletime}");
+        }
     }
 }

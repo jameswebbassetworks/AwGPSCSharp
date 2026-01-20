@@ -9,6 +9,7 @@ namespace CSharpInterviewMessageProcessor.MessageTypes.ManufacturerC;
 public class ManufacturerCMessage : BaseMessageHandler, IMessageType, IMessageHandler
 {
     public string DeviceId { get; set; }
+    public string VIN { get; set; }
     public ManufacturerCConstants.EventCodeType EventCode { get; set; }
     public double Latitude { get; set; }
     public double Longitude { get; set; }
@@ -31,9 +32,10 @@ public class ManufacturerCMessage : BaseMessageHandler, IMessageType, IMessageHa
         var newMessage = new ManufacturerCMessage
         {
             DeviceId = manufacturerBMessageDto.DeviceId,
+            VIN = manufacturerBMessageDto.VIN,
             EventCode = Enum.Parse<ManufacturerCConstants.EventCodeType>(manufacturerBMessageDto.EventCode),
-            Latitude = manufacturerBMessageDto.Latitude.ToLong(),
-            Longitude = manufacturerBMessageDto.Longitude.ToLong(),
+            Latitude = manufacturerBMessageDto.Latitude.ToDouble(),
+            Longitude = manufacturerBMessageDto.Longitude.ToDouble(),
             Timestamp = manufacturerBMessageDto.Timestamp.ToDateTimeOffset(),
             Speed = manufacturerBMessageDto.Speed.ToInt(),
             Direction = manufacturerBMessageDto.Direction.ToInt(),
@@ -59,7 +61,9 @@ public class ManufacturerCMessage : BaseMessageHandler, IMessageType, IMessageHa
             Time = TimeOnly.FromDateTime(Timestamp.DateTime),
             Speed = Speed,
             MaxSpeed = MaxSpeed,
-            Idletime = Idletime
+            Idletime = Idletime,
+            SpeedUnits = ManufacturerCConstants.SpeedUnits,
+            VIN = VIN
         };
 
         CombinedMessage = combinedMessage;

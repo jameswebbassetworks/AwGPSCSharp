@@ -32,8 +32,8 @@ public class ManufacturerBMessage : BaseMessageHandler, IMessageType, IMessageHa
         {
             DeviceId = manufacturerBMessageDto.DeviceId,
             EventCode = Enum.Parse<EventCodeType>(manufacturerBMessageDto.EventCode),
-            Latitude = manufacturerBMessageDto.Latitude.ToLong(),
-            Longitude = manufacturerBMessageDto.Longitude.ToLong(),
+            Latitude = manufacturerBMessageDto.Latitude.ToDouble(),
+            Longitude = manufacturerBMessageDto.Longitude.ToDouble(),
             Timestamp = manufacturerBMessageDto.Timestamp.ToDateTimeOffset(),
             Speed = manufacturerBMessageDto.Speed.ToInt(),
             Direction = manufacturerBMessageDto.Direction.ToInt(),
@@ -58,7 +58,8 @@ public class ManufacturerBMessage : BaseMessageHandler, IMessageType, IMessageHa
             Time = TimeOnly.FromDateTime(Timestamp.DateTime),
             Speed = Speed,
             MaxSpeed = MaxSpeed,
-            Idletime = Idletime
+            Idletime = Idletime,
+            SpeedUnits = ManufacturerBConstants.SpeedUnits
         };
 
         CombinedMessage = combinedMessage;
