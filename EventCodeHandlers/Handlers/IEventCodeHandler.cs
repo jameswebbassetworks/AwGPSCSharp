@@ -16,11 +16,12 @@ public interface IEventCodeHandler
     {
         var vinData = WebRequestCache.GetVinInformation(message.VIN!).Result;
 
-        var model = vinData.Results.FirstOrDefault(r => r.VariableId == 28)!;
         var modelYear = vinData.Results.FirstOrDefault(r => r.VariableId == 29)!;
-        var vehicleType = vinData.Results.FirstOrDefault(r => r.VariableId == 39)!;
+        var make = vinData.Results.FirstOrDefault(r => r.VariableId == 26)!;
+        var model = vinData.Results.FirstOrDefault(r => r.VariableId == 28)!;
+        var fuelTypePrimary = vinData.Results.FirstOrDefault(r => r.VariableId == 24)!;
 
-        List<QueryVariables> features = [model, modelYear, vehicleType];
+        List<QueryVariables> features = [modelYear, make, model, fuelTypePrimary];
             
         Console.WriteLine($"VIN: {message.VIN}");
         foreach (var feature in features)
