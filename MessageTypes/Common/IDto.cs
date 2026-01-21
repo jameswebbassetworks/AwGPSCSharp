@@ -1,5 +1,3 @@
 ﻿namespace CSharpInterviewMessageProcessor.MessageTypes.Common;
 
-public interface IDto
-{
-}
+public interface IDto;

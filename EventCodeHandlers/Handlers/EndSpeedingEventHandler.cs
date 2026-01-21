@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using CSharpInterviewMessageProcessor.Extensions;
-using CSharpInterviewMessageProcessor.Helpers.WebRequests;
 using CSharpInterviewMessageProcessor.MessageTypes.Common;
 
 namespace CSharpInterviewMessageProcessor.EventCodeHandlers.Handlers;
@@ -29,10 +25,5 @@ public class EndSpeedingEventHandler : IEventCodeHandler
         {
             Console.WriteLine($"Max Speed: {message.MaxSpeed}{message.SpeedUnits}");
         }
-    }
-
-    private static async Task<VinQueryResult> GetVinInformation(string vin)
-    {
-        return await WebRequestCache.GetVinData(vin);;
     }
 }

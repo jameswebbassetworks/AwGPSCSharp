@@ -2,6 +2,9 @@
 
 namespace CSharpInterviewMessageProcessor.Helpers.WebRequests;
 
+/// <summary>
+/// Generated from Quicktype from the response of the API
+/// </summary>
 public class VinQueryResult
 {
     [JsonPropertyName("Count")]

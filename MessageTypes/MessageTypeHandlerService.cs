@@ -10,11 +10,11 @@ namespace CSharpInterviewMessageProcessor.MessageTypes;
 public class MessageTypeHandlerService : IMessageTypeHandlerService
 {
     private static readonly ILogger Logger = ConsoleAppLogging.CreateLogger(nameof(MessageTypeHandlerService));
-    private static readonly ConcurrentDictionary<int, IMessageHandler> Handlers = new();
+    private static readonly ConcurrentDictionary<int, IMessageGenerator> Handlers = new();
 
-    public void RegisterHandler(int messageType, IMessageHandler messageHandler)
+    public void RegisterHandler(int messageType, IMessageGenerator messageGenerator)
     {
-        Handlers.TryAdd(messageType, messageHandler);
+        Handlers.TryAdd(messageType, messageGenerator);
     }
 
     public IMessageType RunHandler(int messageType, Dictionary<int, string> fields)

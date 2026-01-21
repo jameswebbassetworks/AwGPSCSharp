@@ -3,8 +3,7 @@ using CSharpInterviewMessageProcessor.MessageTypes.Common;
 
 namespace CSharpInterviewMessageProcessor.MessageTypes;
 
-public interface IMessageHandler
+public interface IMessageGenerator
 {
-    static int MessageTypeId { get; }
     IMessageType GenerateMessage(Dictionary<int, string> fields);
 }

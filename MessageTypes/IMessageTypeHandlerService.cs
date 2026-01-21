@@ -5,6 +5,6 @@ namespace CSharpInterviewMessageProcessor.MessageTypes;
 
 public interface IMessageTypeHandlerService
 {
-    void RegisterHandler(int messageType, IMessageHandler messageHandler);
+    void RegisterHandler(int messageType, IMessageGenerator messageGenerator);
     IMessageType RunHandler(int messageType, Dictionary<int, string> fields);
 }

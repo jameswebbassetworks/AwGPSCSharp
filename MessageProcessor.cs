@@ -14,7 +14,7 @@ public class MessageProcessor
     public MessageProcessor()
     {
         // Register all Message Handlers
-        var messageHandlers = ReflectionHelper.GetObjectsByBaseClass<BaseMessageHandler>();
+        var messageHandlers = ReflectionHelper.GetObjectsByBaseClass<BaseMessageGenerator>();
         foreach (var messageHandler in messageHandlers)
         {
             _messageTypeHandlerService.RegisterHandler(messageHandler.MessageTypeId, messageHandler);
@@ -42,7 +42,10 @@ public class MessageProcessor
         _logger.LogInformation($"Processing message type: {message.MessageType}...");
         _logger.LogInformation($"Message contains {message.Fields.Count} fields");
 
+        // Parse out the message files into a typed DTO class
         var parsedMessage = _messageTypeHandlerService.RunHandler(message.MessageType, message.Fields);
+        
+        // Convert that DTO to a 
         var combinedMessage = parsedMessage.ToCombinedMessage();
         
         _eventCodeHandlerService.RunHandler(combinedMessage.EventCodeName, combinedMessage);

@@ -5,14 +5,14 @@ namespace CSharpInterviewMessageProcessor.MessageTypes.ManufacturerC;
 
 public class ManufacturerCMessageDto : IDto
 {
-    public string VIN { get; init; }
-    public string DeviceId { get; init; }
-    public string EventCode { get; init; }
-    public string Latitude { get; init; }
-    public string Longitude { get; init; }
-    public string Timestamp { get; init; }
-    public string Speed { get; init; }
-    public string Direction { get; init; }
+    public string VIN { get; private init; }
+    public string DeviceId { get; private init; }
+    public string EventCode { get; private init; }
+    public string Latitude { get; private init; }
+    public string Longitude { get; private init; }
+    public string Timestamp { get; private init; }
+    public string Speed { get; private init; }
+    public string Direction { get; private init; }
     public string? Idletime { get; private set; }
     public string? MaxSpeed { get; private set; }
 

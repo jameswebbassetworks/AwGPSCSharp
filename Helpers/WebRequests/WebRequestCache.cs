@@ -1,5 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -31,6 +30,6 @@ public static class WebRequestCache
 
     public static async Task<VinQueryResult> GetVinInformation(string vin)
     {
-        return await GetVinData(vin);;
+        return await GetVinData(vin);
     }
 }

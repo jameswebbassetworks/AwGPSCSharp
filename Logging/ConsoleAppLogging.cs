@@ -4,7 +4,7 @@ namespace CSharpInterviewMessageProcessor.Logging;
 
 public static class ConsoleAppLogging
 {
-    public static ILoggerFactory LoggerFactory { get; } = Microsoft.Extensions.Logging.LoggerFactory.Create(builder =>
+    private static ILoggerFactory LoggerFactory { get; } = Microsoft.Extensions.Logging.LoggerFactory.Create(builder =>
     {
         builder
             .AddConsole()
