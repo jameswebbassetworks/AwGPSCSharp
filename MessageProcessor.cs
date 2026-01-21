@@ -2,8 +2,10 @@ using System;
 using CSharpInterviewMessageProcessor.EventCodeHandlers;
 using CSharpInterviewMessageProcessor.EventCodeHandlers.Handlers;
 using CSharpInterviewMessageProcessor.Helpers;
+using CSharpInterviewMessageProcessor.Logging;
 using CSharpInterviewMessageProcessor.MessageTypes;
 using CSharpInterviewMessageProcessor.MessageTypes.Common;
+using Microsoft.Extensions.Logging;
 
 namespace CSharpInterviewMessageProcessor;
 
@@ -15,7 +17,7 @@ public class MessageProcessor
         var messageHandlers = ReflectionHelper.GetObjectsByBaseClass<BaseMessageHandler>();
         foreach (var messageHandler in messageHandlers)
         {
-            messageHandler.RegisterSelf();
+            _messageTypeHandlerService.RegisterHandler(messageHandler.MessageTypeId, messageHandler);
         }
 
         // Register all Event Code Handlers
@@ -26,7 +28,10 @@ public class MessageProcessor
         }
     }
 
-    private readonly EventCodeHandlerService _eventCodeHandlerService = new();
+    private readonly IEventCodeHandlerService _eventCodeHandlerService = new EventCodeHandlerService();
+    private readonly IMessageTypeHandlerService _messageTypeHandlerService = new MessageTypeHandlerService();
+
+    private readonly ILogger _logger = ConsoleAppLogging.CreateLogger<MessageProcessor>();
     
     public void Process(Message message)
     {
@@ -34,10 +39,10 @@ public class MessageProcessor
         // 1. Extract the relevent information from the message
         // 2. Take the approrpriate action based on the event code in the message
         
-        Console.WriteLine("Processing message...");
-        Console.WriteLine($"Message contains {message.Fields.Count} fields");
+        _logger.LogInformation($"Processing message type: {message.MessageType}...");
+        _logger.LogInformation($"Message contains {message.Fields.Count} fields");
 
-        var parsedMessage = MessageTypeHandler.RunHandler(message.MessageType, message.Fields);
+        var parsedMessage = _messageTypeHandlerService.RunHandler(message.MessageType, message.Fields);
         var combinedMessage = parsedMessage.ToCombinedMessage();
         
         _eventCodeHandlerService.RunHandler(combinedMessage.EventCodeName, combinedMessage);

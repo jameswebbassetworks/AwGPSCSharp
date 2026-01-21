@@ -7,6 +7,4 @@ public interface IMessageHandler
 {
     static int MessageTypeId { get; }
     IMessageType GenerateMessage(Dictionary<int, string> fields);
-
-    void RegisterSelf();
 }
