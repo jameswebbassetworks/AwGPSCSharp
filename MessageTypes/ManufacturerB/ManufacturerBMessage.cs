@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using CSharpInterviewMessageProcessor.Extensions;
 using CSharpInterviewMessageProcessor.MessageTypes.Common;
 using FluentValidation;
@@ -18,7 +19,7 @@ public class ManufacturerBMessage : BaseMessageHandler, IMessageType, IMessageHa
     public double? Idletime { get; set; }
     public double? MaxSpeed { get; set; }
 
-    protected override int MessageTypeId => 1;
+    public override int MessageTypeId => 1;
 
 
     private static ManufacturerBMessage MapToMessageFromDto(IDto messageBaseDto)
@@ -28,14 +29,19 @@ public class ManufacturerBMessage : BaseMessageHandler, IMessageType, IMessageHa
         new ManufacturerBMessageDtoValidator()
             .ValidateAndThrow(manufacturerBMessageDto);
         
+        // Longitude and Latitude are together in one field comma separated
+        var latitudeLongitudeArray = manufacturerBMessageDto.LatitudeLongitude.Split(",");
+        var latitude = latitudeLongitudeArray[0];
+        var longitude = latitudeLongitudeArray[1];
+        
         var newMessage = new ManufacturerBMessage
         {
             DeviceId = manufacturerBMessageDto.DeviceId,
             EventCode = Enum.Parse<EventCodeType>(manufacturerBMessageDto.EventCode),
-            Latitude = manufacturerBMessageDto.Latitude.ToDouble(),
-            Longitude = manufacturerBMessageDto.Longitude.ToDouble(),
+            Latitude = latitude.ToDouble(),
+            Longitude = longitude.ToDouble(),
             Timestamp = manufacturerBMessageDto.Timestamp.ToDateTimeOffset(),
-            Speed = manufacturerBMessageDto.Speed.ToInt(),
+            Speed = manufacturerBMessageDto.Speed.ToDouble(),
             Direction = manufacturerBMessageDto.Direction.ToInt(),
             Idletime = manufacturerBMessageDto.Idletime.ToInt(),
         };
@@ -79,11 +85,17 @@ public class ManufacturerBMessage : BaseMessageHandler, IMessageType, IMessageHa
                 .NotNull()
                 .Must(IsValidEventCode)
                 .WithMessage("Invalid event code");
-            RuleFor(msg => msg.Latitude)
-                .Must(latitude => double.TryParse(latitude, out _))
-                .NotNull();
-            RuleFor(msg => msg.Longitude)
-                .Must(longitude => double.TryParse(longitude, out _))
+            RuleFor(msg => msg.LatitudeLongitude)
+                .Must(latlong => latlong.Count(ll => ll == ',') == 1)
+                .WithMessage("Invalid Latitude and Longitude (commas): {PropertyValue}")
+                .Must(latlong =>
+                {
+                    var splitArray = latlong.Split(',');
+                    var lat = splitArray[0];
+                    var lng = splitArray[1];
+                    return double.TryParse(lat, out _) && double.TryParse(lng, out _);
+                })
+                .WithMessage("Invalid Latitude and Longitude: {PropertyValue}")
                 .NotNull();
             RuleFor(msg => msg.Timestamp)
                 .Must(timestamp => DateTimeOffset.TryParse(timestamp, out _))

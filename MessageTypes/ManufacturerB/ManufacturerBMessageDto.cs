@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using CSharpInterviewMessageProcessor.MessageTypes.Common;
 
 namespace CSharpInterviewMessageProcessor.MessageTypes.ManufacturerB;
@@ -7,8 +8,7 @@ public class ManufacturerBMessageDto : IDto
 {
     public string DeviceId { get; init; }
     public string EventCode { get; init; }
-    public string Latitude { get; init; }
-    public string Longitude { get; init; }
+    public string LatitudeLongitude { get; init; }
     public string Timestamp { get; init; }
     public string Speed { get; init; }
     public string Direction { get; init; }
@@ -16,17 +16,12 @@ public class ManufacturerBMessageDto : IDto
 
     public static ManufacturerBMessageDto CreateManufacturerBMessageDto(Dictionary<int, string> fieldMap)
     {
-        // Longitude and Latitude are together in one field comma separated
-        var latitudeLongitudeArray = fieldMap[ManufacturerBConstants.LatitudeLongitude].Split(",");
-        var latitude = latitudeLongitudeArray[0];
-        var longitude = latitudeLongitudeArray[1];
         
         var dto = new ManufacturerBMessageDto
         {
             DeviceId = fieldMap[ManufacturerBConstants.DeviceId],
             EventCode = fieldMap[ManufacturerBConstants.EventCode],
-            Latitude = latitude,
-            Longitude = longitude,
+            LatitudeLongitude = fieldMap[ManufacturerBConstants.LatitudeLongitude],
             Timestamp = fieldMap[ManufacturerBConstants.Timestamp],
             Speed = fieldMap[ManufacturerBConstants.Speed],
             Direction = fieldMap[ManufacturerBConstants.Direction],

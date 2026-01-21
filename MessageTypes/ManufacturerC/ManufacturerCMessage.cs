@@ -19,27 +19,28 @@ public class ManufacturerCMessage : BaseMessageHandler, IMessageType, IMessageHa
     public double? Idletime { get; set; }
     public double? MaxSpeed { get; set; }
 
-    protected override int MessageTypeId => 3;
+    public override int MessageTypeId => 3;
 
 
     public static ManufacturerCMessage MapToMessageFromDto(IDto messageBaseDto)
     {
-        var manufacturerBMessageDto = (ManufacturerCMessageDto)messageBaseDto;
+        var manufacturerCMessageDto = (ManufacturerCMessageDto)messageBaseDto;
         
         new ManufacturerCMessageDtoValidator()
-            .ValidateAndThrow(manufacturerBMessageDto);
+            .ValidateAndThrow(manufacturerCMessageDto);
         
         var newMessage = new ManufacturerCMessage
         {
-            DeviceId = manufacturerBMessageDto.DeviceId,
-            VIN = manufacturerBMessageDto.VIN,
-            EventCode = Enum.Parse<ManufacturerCConstants.EventCodeType>(manufacturerBMessageDto.EventCode),
-            Latitude = manufacturerBMessageDto.Latitude.ToDouble(),
-            Longitude = manufacturerBMessageDto.Longitude.ToDouble(),
-            Timestamp = manufacturerBMessageDto.Timestamp.ToDateTimeOffset(),
-            Speed = manufacturerBMessageDto.Speed.ToInt(),
-            Direction = manufacturerBMessageDto.Direction.ToInt(),
-            Idletime = manufacturerBMessageDto.Idletime.ToInt(),
+            DeviceId = manufacturerCMessageDto.DeviceId,
+            VIN = manufacturerCMessageDto.VIN,
+            EventCode = Enum.Parse<ManufacturerCConstants.EventCodeType>(manufacturerCMessageDto.EventCode),
+            Latitude = manufacturerCMessageDto.Latitude.ToDouble(),
+            Longitude = manufacturerCMessageDto.Longitude.ToDouble(),
+            Timestamp = manufacturerCMessageDto.Timestamp.ToDateTimeOffset(),
+            Speed = manufacturerCMessageDto.Speed.ToDouble(),
+            Direction = manufacturerCMessageDto.Direction.ToInt(),
+            Idletime = manufacturerCMessageDto.Idletime.ToInt(),
+            MaxSpeed = manufacturerCMessageDto.MaxSpeed!.ToDouble()
         };
 
         return newMessage;

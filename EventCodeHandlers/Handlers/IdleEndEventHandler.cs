@@ -14,7 +14,7 @@ public class IdleEndEventHandler : IEventCodeHandler
 
     public void HandleEventCode(CombinedMessage message)
     {
-        Console.WriteLine(new string("-"), 15);
+        Console.WriteLine(new string('-', 15));
         if (message.VIN.IsNotNullOrWhiteSpace())
         {
             ((IEventCodeHandler)this).LogVinInformation(message); // Trying out Default Interface Method here.

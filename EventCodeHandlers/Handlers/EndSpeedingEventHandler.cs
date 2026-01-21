@@ -14,23 +14,10 @@ public class EndSpeedingEventHandler : IEventCodeHandler
 
     public void HandleEventCode(CombinedMessage message)
     {
-        Console.WriteLine(new string("-"), 15);
+        Console.WriteLine(new string('-', 15));
         if (message.VIN.IsNotNullOrWhiteSpace())
         {
-            var vinData = GetVinInformation(message.VIN!).Result; // Blocking await
-
-            var model = vinData.Results.FirstOrDefault(r => r.VariableId == 28)!;
-            var modelYear = vinData.Results.FirstOrDefault(r => r.VariableId == 29)!;
-            var vehicleType = vinData.Results.FirstOrDefault(r => r.VariableId == 39)!;
-
-            List<QueryVariables> features = [model, modelYear, vehicleType];
-            
-            Console.WriteLine($"VIN: {message.VIN}");
-            foreach (var feature in features)
-            {
-                Console.WriteLine($"{feature.Variable}: {feature.Value}");
-            }
-            
+            ((IEventCodeHandler)this).LogVinInformation(message); // Trying out Default Interface Method here.
         }
         Console.WriteLine($"Event Type: {message.EventCodeName}");
         Console.WriteLine($"Timestamp: {message.Timestamp:u}");

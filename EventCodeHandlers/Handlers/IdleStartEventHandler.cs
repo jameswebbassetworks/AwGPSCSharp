@@ -10,7 +10,7 @@ public class IdleStartEventHandler : IEventCodeHandler
 
     public void HandleEventCode(CombinedMessage message)
     {
-        Console.WriteLine(new string("-"), 15);
+        Console.WriteLine(new string('-', 15));
         if (message.VIN.IsNotNullOrWhiteSpace())
         {
             Console.WriteLine($"VIN: {message.VIN}");

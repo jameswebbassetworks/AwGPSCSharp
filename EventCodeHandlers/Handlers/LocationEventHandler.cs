@@ -10,10 +10,10 @@ public class LocationEventHandler : IEventCodeHandler
 
     public void HandleEventCode(CombinedMessage message)
     {
-        Console.WriteLine(new string("-"), 15);
+        Console.WriteLine(new string('-', 15));
         if (message.VIN.IsNotNullOrWhiteSpace())
         {
-            Console.WriteLine($"VIN: {message.VIN}");
+            ((IEventCodeHandler)this).LogVinInformation(message); // Trying out Default Interface Method here.
         }
         Console.WriteLine($"Event Type: {message.EventCodeName}");
         Console.WriteLine($"Timestamp: {message.Timestamp:u}");

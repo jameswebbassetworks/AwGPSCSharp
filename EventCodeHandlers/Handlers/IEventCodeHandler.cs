@@ -26,7 +26,7 @@ public interface IEventCodeHandler
         Console.WriteLine($"VIN: {message.VIN}");
         foreach (var feature in features)
         {
-            Console.WriteLine($"{feature.Variable}: {feature.Value}");
+            Console.WriteLine($"    {feature.Variable}: {feature.Value}");
         }
     }
 

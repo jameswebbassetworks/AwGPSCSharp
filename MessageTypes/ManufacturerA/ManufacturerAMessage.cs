@@ -18,7 +18,7 @@ public class ManufacturerAMessage : BaseMessageHandler, IMessageType, IMessageHa
     public double? Idletime { get; set; }
     public double? MaxSpeed { get; set; }
 
-    protected override int MessageTypeId => 0;
+    public override int MessageTypeId => 0;
 
     
     public static ManufacturerAMessage MapToMessageFromDto(IDto messageBaseDto)
@@ -27,7 +27,7 @@ public class ManufacturerAMessage : BaseMessageHandler, IMessageType, IMessageHa
         
         new ManufacturerAMessageDtoValidator()
             .ValidateAndThrow(manufacturerAMessageDto);
-        
+
         var newMessage = new ManufacturerAMessage
         {
             DeviceId = manufacturerAMessageDto.DeviceId,
@@ -35,10 +35,10 @@ public class ManufacturerAMessage : BaseMessageHandler, IMessageType, IMessageHa
             Latitude = manufacturerAMessageDto.Latitude.ToDouble(),
             Longitude = manufacturerAMessageDto.Longitude.ToDouble(),
             Timestamp = manufacturerAMessageDto.Timestamp.ToDateTimeOffset(),
-            Speed = manufacturerAMessageDto.Speed.ToInt(),
+            Speed = manufacturerAMessageDto.Speed.ToDouble(),
             Direction = manufacturerAMessageDto.Direction.ToInt(),
             Idletime = manufacturerAMessageDto.Idletime.ToInt(),
-            MaxSpeed = manufacturerAMessageDto.MaxSpeed.ToInt()
+            MaxSpeed = manufacturerAMessageDto.MaxSpeed!.ToDouble()
         };
 
         return newMessage;
