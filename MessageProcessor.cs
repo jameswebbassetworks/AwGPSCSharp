@@ -44,8 +44,19 @@ public class MessageProcessor
 
         // Parse out the message files into a typed DTO class
         var parsedMessage = _messageTypeHandlerService.RunHandler(message.MessageType, message.Fields);
+
+        // Error handling on the parsing of the message fields
+        if (((BaseMessageGenerator)parsedMessage).HasErrors)
+        {
+            foreach (var error in ((BaseMessageGenerator)parsedMessage).ValidationResults.Errors)
+            {
+                _logger.LogError(error!.ErrorMessage);
+            }
+
+            return;
+        }
         
-        // Convert that DTO to a 
+        // Map the Specific Manufacturer Message to a Combined Message for parsing event codes
         var combinedMessage = parsedMessage.ToCombinedMessage();
         
         _eventCodeHandlerService.RunHandler(combinedMessage.EventCodeName, combinedMessage);

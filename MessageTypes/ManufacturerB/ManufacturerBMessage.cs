@@ -4,6 +4,7 @@ using System.Linq;
 using CSharpInterviewMessageProcessor.Extensions;
 using CSharpInterviewMessageProcessor.MessageTypes.Common;
 using FluentValidation;
+using FluentValidation.Results;
 
 namespace CSharpInterviewMessageProcessor.MessageTypes.ManufacturerB;
 
@@ -20,14 +21,25 @@ public class ManufacturerBMessage : BaseMessageGenerator, IMessageType, IMessage
     public double? MaxSpeed { get; set; }
 
     public override int MessageTypeId => 1;
+    public override bool HasErrors { get; set; }
+    public override ValidationResult ValidationResults { get; set; }
 
 
     private static ManufacturerBMessage MapToMessageFromDto(IDto messageBaseDto)
     {
         var manufacturerBMessageDto = (ManufacturerBMessageDto)messageBaseDto;
         
-        new ManufacturerBMessageDtoValidator()
-            .ValidateAndThrow(manufacturerBMessageDto);
+        var validationResults = new ManufacturerBMessageDtoValidator()
+            .Validate(manufacturerBMessageDto);
+
+        if (validationResults.IsValid.IsFalse())
+        {
+            return new ManufacturerBMessage
+            {
+                HasErrors = validationResults.IsValid.IsFalse(), 
+                ValidationResults = validationResults
+            };
+        }
         
         // Longitude and Latitude are together in one field comma separated
         var latitudeLongitudeArray = manufacturerBMessageDto.LatitudeLongitude.Split(",");

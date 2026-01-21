@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CSharpInterviewMessageProcessor.Extensions;
 using CSharpInterviewMessageProcessor.MessageTypes.Common;
 using FluentValidation;
+using FluentValidation.Results;
 
 namespace CSharpInterviewMessageProcessor.MessageTypes.ManufacturerA;
 
@@ -19,14 +20,26 @@ public class ManufacturerAMessage : BaseMessageGenerator, IMessageType, IMessage
     private double? MaxSpeed { get; init; }
 
     public override int MessageTypeId => 0;
+    public override bool HasErrors { get; set; }
+    
+    public override ValidationResult ValidationResults { get; set; }
 
 
     private static ManufacturerAMessage MapToMessageFromDto(IDto messageBaseDto)
     {
         var manufacturerAMessageDto = (ManufacturerAMessageDto)messageBaseDto;
         
-        new ManufacturerAMessageDtoValidator()
-            .ValidateAndThrow(manufacturerAMessageDto);
+        var validationResults = new ManufacturerAMessageDtoValidator()
+            .Validate(manufacturerAMessageDto);
+
+        if (validationResults.IsValid.IsFalse())
+        {
+            return new ManufacturerAMessage
+            {
+                HasErrors = validationResults.IsValid.IsFalse(), 
+                ValidationResults = validationResults
+            };
+        }
 
         var newMessage = new ManufacturerAMessage
         {
