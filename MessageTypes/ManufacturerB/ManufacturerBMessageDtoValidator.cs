@@ -12,11 +12,12 @@ public sealed class ManufacturerBMessageDtoValidator : AbstractValidator<Manufac
         RuleFor(msg => msg.DeviceId)
             .Length(4,15)
             .Must(deviceId => deviceId.StartsWith("DEV"))
+            .WithMessage("Invalid {PropertyName}: {PropertyValue}")
             .NotNull();
         RuleFor(msg => msg.EventCode)
             .NotNull()
             .Must(IsValidEventCode)
-            .WithMessage("Invalid event code");
+            .WithMessage("Invalid {PropertyName}: {PropertyValue}");
         RuleFor(msg => msg.LatitudeLongitude)
             .Must(latlong => latlong.Count(ll => ll == ',') == 1)
             .WithMessage("Invalid Latitude and Longitude (commas): {PropertyValue}")
@@ -31,16 +32,20 @@ public sealed class ManufacturerBMessageDtoValidator : AbstractValidator<Manufac
             .NotNull();
         RuleFor(msg => msg.Timestamp)
             .Must(timestamp => DateTimeOffset.TryParse(timestamp, out _))
+            .WithMessage("Invalid {PropertyName}: {PropertyValue}")
             .NotNull();
         RuleFor(msg => msg.Speed)
+            .Must(speed => double.TryParse(speed, out var parsedValue) && parsedValue >= 0)
+            .WithMessage("Invalid {PropertyName}: {PropertyValue}")
             .NotNull();
         RuleFor(msg => msg.Direction)
             .Must(direction => int.TryParse(direction, out _))
+            .WithMessage("Invalid {PropertyName}: {PropertyValue}")
             .NotNull();
         RuleFor(msg => msg.Idletime)
             .Must(idleTime => double.TryParse(idleTime, out _))
             .When(msg => msg.Idletime.IsNotNullOrWhiteSpace())
-            .WithMessage("Invalid idle time");
+            .WithMessage("Invalid {PropertyName}: {PropertyValue}");
     }
 
     private static bool IsValidEventCode(string eventCode)
