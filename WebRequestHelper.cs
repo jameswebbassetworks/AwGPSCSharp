@@ -21,6 +21,6 @@ public class WebRequestHelper
 
     public string Get(string url)
     {
-        return GetAsync(url).GetAwaiter().GetResult();
+        return Task.Run(async () => await GetAsync(url)).GetAwaiter().GetResult();
     }
 }
